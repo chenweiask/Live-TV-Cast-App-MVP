@@ -1,0 +1,30 @@
+name: Android Build
+
+on:
+  push:
+    branches:
+      - main  # 可以根据需要修改为你要触发构建的分支
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # 根据项目需要选择合适的JDK版本
+
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
